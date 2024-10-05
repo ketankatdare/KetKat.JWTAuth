@@ -57,7 +57,11 @@ jobs:
       - name: Set version number from Git tags
         id: vars
         run: |
-          VERSION=$(git describe --tags --abbrev=0 || echo "0.1.0")
+          if git describe --tags --abbrev=0 >/dev/null 2>&1; then
+              VERSION=$(git describe --tags --abbrev=0 | sed 's/^v//')
+          else
+              VERSION="0.1.0"
+          fi
           echo "::set-output name=VERSION::$VERSION"
 
       - name: Publish to NuGet
