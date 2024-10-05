@@ -53,9 +53,11 @@ jobs:
       - name: Set version number from Git tags
         id: vars
         run: |
-          echo "::set-output name=VERSION::$(git describe --tags --always --match "v[0-9]*")"
+          VERSION=$(git describe --tags --abbrev=0 || echo "0.1.0")
+          echo "::set-output name=VERSION::$VERSION"
 
       - name: Publish to NuGet
         run: |
           dotnet pack --configuration Release /p:PackageVersion=${{ steps.vars.outputs.VERSION }} --no-build
           dotnet nuget push ./bin/Release/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+
