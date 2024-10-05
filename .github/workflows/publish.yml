@@ -58,6 +58,7 @@ jobs:
 
       - name: Publish to NuGet
         run: |
-          dotnet pack --configuration Release /p:PackageVersion=${{ steps.vars.outputs.VERSION }} --no-build
-          dotnet nuget push ./bin/Release/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+          dotnet pack --configuration Release --output ./nupkg /p:PackageVersion=${{ steps.vars.outputs.VERSION }} --no-build
+          dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+
 
